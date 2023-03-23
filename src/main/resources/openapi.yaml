@@ -1,0 +1,186 @@
+openapi: 3.0.1
+info:
+  title: Scooty Rental Service
+  description: Scooty Rental Service CRUD API.
+  version: 1.0.0
+tags:
+  - name: ScootyRental
+    description: Manage Scooty
+paths:
+  /outlets:
+    get:
+      tags:
+        - OutletsDetail
+      summary: Get all outlets
+      operationId: getAllOutlets
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OutletDTO"
+    post:
+      tags:
+        - OutletsDetail
+      summary: Add a outlet to the system
+      operationId: addOutlet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OutletDTO'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutletDTO'
+  /outlets/getOutletByName:
+    get:
+      tags:
+        - OutletsDetail
+      summary: get outlet by name
+      operationId: getOutletByName
+      parameters:
+        - in: query
+          name: outletName
+          description: The outlet name
+          schema:
+            $ref: "#/components/schemas/OutletNameDTO"
+          required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutletDTO'
+  /outlets/createReservation:
+    put:
+      tags:
+        - OutletsDetail
+      summary: create reservation
+      operationId: createReservation
+      parameters:
+        - in: query
+          name: outletName
+          description: The outlet name
+          schema:
+            $ref: "#/components/schemas/OutletNameDTO"
+          required: true
+        - in: query
+          name: model
+          description: model of the vehicle
+          schema:
+            $ref: "#/components/schemas/ModelDTO"
+          required: true
+        - in: query
+          name: reservedBy
+          description: reserved by which user
+          schema:
+            $ref: "#/components/schemas/UserDTO"
+          required: true
+        - in: query
+          name: reservedUntil
+          description: reservation until
+          schema:
+            type: string
+            format: date
+          required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutletDTO'
+        404:
+          description: Outlet not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorList"
+components:
+  schemas:
+    OutletNameDTO:
+      type: string
+      enum:
+        - "outlet1"
+        - "outlet2"
+        - "outlet3"
+      x-enum-varnames:
+        - "outlet1"
+        - "outlet2"
+        - "outlet3"
+    UserDTO:
+      type: string
+      enum:
+        - "user1"
+        - "user2"
+        - "user3"
+      x-enum-varnames:
+        - "user1"
+        - "user2"
+        - "user3"
+    ModelDTO:
+      type: string
+      enum:
+        - "model1"
+        - "model2"
+        - "model3"
+      x-enum-varnames:
+        - "model1"
+        - "model2"
+        - "model3"
+    VehicleDTO:
+      type: object
+      properties:
+        model:
+          $ref: "#/components/schemas/ModelDTO"
+          description: The Model of Vehicle
+        availability:
+          type: boolean
+          description: The availability of vehicle
+        reservedBy:
+          $ref: "#/components/schemas/UserDTO"
+          description: The Reserved By user
+        reservedUntil:
+          type: string
+          description: reserved until date time
+          format: date
+    OutletDTO:
+      type: object
+      properties:
+        outletName:
+          $ref: "#/components/schemas/OutletNameDTO"
+          description: The outlet name
+        parkingSlots:
+          type: integer
+          description: no of parking slots in outlet
+        vehicles:
+          type: array
+          items:
+            $ref: "#/components/schemas/VehicleDTO"
+    ErrorList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Error"
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        field:
+          type: string
+          description: Error field
+        message:
+          type: string
+          description: Error message
+
+

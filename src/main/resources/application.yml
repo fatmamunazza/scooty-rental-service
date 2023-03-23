@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      repositories:
+        type: reactive
+      database: test
+      uri: mongodb+srv://fatmamunazza:Munazza123@cluster1.wqsw2ox.mongodb.net/?retryWrites=true&w=majority
+      auto-index-creation: true
+
+springdoc:
+  swagger-ui:
+    path: "/swagger-ui.html"
+debug: true
